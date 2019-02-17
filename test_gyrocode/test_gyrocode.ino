@@ -1,3 +1,5 @@
+#include <Wire.h>
+
 // Arduino sketch that returns calibration offsets for MPU6050 //   Version 1.1  (31th January 2014)
 // Done by Luis Ródenas <luisrodenaslorda@gmail.com>
 // Based on the I2Cdev library and previous work by Jeff Rowberg <jeff@rowberg.net>
@@ -34,7 +36,7 @@
 // I2Cdev and MPU6050 must be installed as libraries
 #include "I2Cdev.h"
 #include "MPU6050.h"
-#include "Wire.h"
+//#include "Wire.h"
 
 ///////////////////////////////////   CONFIGURATION   /////////////////////////////
 //Change this 3 variables if you want to fine tune the skecth to your needs.
@@ -62,7 +64,7 @@ void setup() {
   TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz). Leonardo measured 250kHz.
 
   // initialize serial communication
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // initialize device
   accelgyro.initialize();
