@@ -1,7 +1,8 @@
 // Test code for the IR Sensor
 double x, y;
 double newVolt, newVolt1;
-double data[10]; //vector to store readings
+int data[1000]; //vector to store readings
+int valSize = 1000;
 //A0 is IR 1 and A1 is IR 2
 void setup() 
 {
@@ -10,7 +11,26 @@ void setup()
 }
 
 void loop() 
-{ 
+{
+   
+   for(int i = 0; i < valSize; i++) {
+      data[i] = analogRead(A0);
+   }
+   for(int i = 50; i < 100; i++) {
+      //data[i] = analogRead(A1);
+   }
+
+   double avg = averagePos(data, valSize);
+   refineValues(data, valSize, avg);
+   avg = averagePos(data, valSize);
+
+   //float inches = 4164.85 * pow(avg,-.9765);
+    float inches = 4300 * pow(avg,-.9765); //irsensor red
+   Serial.print("Inches: ");
+   Serial.println(inches);
+
+   while(1) {}
+   /*
    x = analogRead(A0);
    newVolt = x * (5.0 / 1023.0);
    Serial.println(newVolt);
@@ -37,8 +57,29 @@ void loop()
   Serial.println(" ");
   
   delay(2000);
+  */
 }
 
+double averagePos(int data[], int size) {
+    int count = 0;
+    double sum = 0;
+    for(int i = 0; i < size; i++) {
+        if(data[i] > 0) {
+            sum += (int)data[i];
+            ++count;
+        }
+    }
+    return sum/count;
+}
+
+void refineValues(int data[], int size, double average) {
+    int diff = 1;
+    for(int i = 0; i < size; i++) {
+        if(data[i] > (average + diff) || data[i] < (average - diff)) {
+            data[i] = -1;
+        }
+    }
+}
 /*for (int i = 0; i < 10; i++)
   {
     x = analogRead(A0);
