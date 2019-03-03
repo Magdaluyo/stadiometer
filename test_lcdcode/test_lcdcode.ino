@@ -16,9 +16,9 @@ void loop() {
   for(int i = 0; i < count;i++) {
     lcd.print(' ');
   }
-  lcd.print("    Dominic");
+  lcd.print("      ENGR");
   lcd.setCursor(0,1);
-  lcd.print("   Magdaluyo");
+  lcd.print("      110!");
   //count++;
   count = count % 17;
   delay(300);
