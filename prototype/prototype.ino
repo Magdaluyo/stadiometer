@@ -13,7 +13,8 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int x_val;
 int y_val;
-int levelOffset = 800;
+int levelOffsetX = 600;
+int levelOffsetY = 500;
 
 int data[2000]; //vector to store readings
 int valSize = 2000;
@@ -61,13 +62,13 @@ void loop() {
 
    while(1) {
       mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-      if(x_val < ax + levelOffset && x_val > ax - levelOffset && y_val < ax + levelOffset && y_val > ax - levelOffset)
+      if(x_val < ax + levelOffsetX && x_val > ax - levelOffsetX && y_val < ax + levelOffsetY && y_val > ax - levelOffsetY)
           break;
       
-      tone(buzzer, 1000);
+      tone(buzzer, 3000 - ((abs(ax) + abs(ay))/50));
       delay(75); 
       noTone(buzzer);
-      delay(1000);
+      delay(250);
       
    }
 
@@ -79,7 +80,8 @@ void loop() {
    refineValues(data, valSize, avg);
    avg = averagePos(data, valSize);
 
-   double inches = 4164.85 * pow(avg,-.9765); // irsensor blue
+   //double inches = 4164.85 * pow(avg,-.9765); // irsensor blue
+   double inches = 4300.85 * pow(avg,-.9765);
    //double cm = 10650.08 * pow(avg,-0.935) - 10;
    double cm = inches * 2.54;
    lcd.clear();
