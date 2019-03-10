@@ -4,6 +4,7 @@
 #include "Wire.h"
 
 const int buzzer = 9; //buzzer to arduino pin 9
+const int button = 12;
 LiquidCrystal lcd(44,42,52,50,48,46); //Correlates to the RS,E,D4,D5,D6,D7
 MPU6050 mpu(0x68);
 
@@ -21,6 +22,7 @@ int valSize = 2800;
 
 void setup() {
   pinMode(buzzer, OUTPUT); // Set buzzer - pin 9 as an output
+  pinMode(button, INPUT);
 
   tone(buzzer, 2500); // Send 2.5KHz sound signal...
   delay(75);        // 
@@ -60,6 +62,13 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+   int measurestate = 0;
+   while(1) {
+      measurestate = digitalRead(button);
+      if(measurestate == HIGH) 
+          break;
+   }
+   
    while(1) {
       mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
       if(x_val < ax + levelOffsetX && x_val > ax - levelOffsetX && y_val < ax + levelOffsetY && y_val > ax - levelOffsetY)
@@ -80,7 +89,7 @@ void loop() {
    refineValues(data, valSize, avg);
    avg = averagePos(data, valSize);
    double volt = (5000*avg)/1023;
-//Usig power function
+//Using power function
    //double inches = 4164.85 * pow(avg,-.9765); // irsensor blue
    //double inches = 4300.85 * pow(avg,-.9765);
    //double cm = 10650.08 * pow(avg,-0.935) - 10;
@@ -88,7 +97,7 @@ void loop() {
 
 //Using inverse of distance to get linear equation
    
-   double cm = 1/((volt - 1125)/137500);
+   double cm = (1/((volt - 1125)/137500)) - 1.5;    // height in cm
    double inches = cm/2.54;
    
    lcd.clear();
