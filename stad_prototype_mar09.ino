@@ -97,7 +97,7 @@ void loop() {
 
 //Using inverse of distance to get linear equation
    
-   double cm = (1/((volt - 1125)/137500)) - 1.5;    // height in cm
+   double cm = (1/((volt - 1125)/137500)) - 0.8023;    // height in cm
    double inches = cm/2.54;
    
    lcd.clear();
